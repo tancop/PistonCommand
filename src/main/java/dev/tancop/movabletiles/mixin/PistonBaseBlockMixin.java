@@ -64,6 +64,6 @@ public class PistonBaseBlockMixin {
             }
             return !blockState.is(MovableTiles.MOVABLE_BLOCK_ENTITIES);
         }
-        return true;
+        return false;
     }
 }
