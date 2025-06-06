@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "movabletiles.refmap.json",
   "mixins": [
+    "BlockEntityMixin",
     "PistonBaseBlockMixin",
     "PistonMovingBlockEntityMixin"
   ],
