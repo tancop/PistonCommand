@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// Extends PistonMovingBlockEntity to store block entities and move them over to their new position
 @Mixin(PistonMovingBlockEntity.class)
 @Implements(@Interface(iface = PistonMovingBlockEntityExt.class, prefix = "ext$"))
 public class PistonMovingBlockEntityMixin extends BlockEntity {
@@ -34,16 +35,16 @@ public class PistonMovingBlockEntityMixin extends BlockEntity {
         if (entity != null) {
             entity.setChanged();
         }
-        System.out.println("Set moved entity to " + entity);
         this.ext$movedEntity = entity;
     }
 
+    // Moves the stored block entity and changes its internal position
     @Inject(method = "tick", at = @At(value = "INVOKE", target =
-            "Lnet/minecraft/world/level/Level;neighborChanged(Lnet/minecraft/core/BlockPos;" + "Lnet/minecraft/world/level/block/Block;" + "Lnet" + "/minecraft/core/BlockPos;)V", shift = At.Shift.AFTER))
-    private static void replaceBlockEntityTick(Level level, BlockPos pos, BlockState state, PistonMovingBlockEntity blockEntity, CallbackInfo ci) {
+            "Lnet/minecraft/world/level/Level;neighborChanged(Lnet/minecraft/core/BlockPos;" + "Lnet/minecraft/world/level/block/Block;Lnet" +
+                    "/minecraft/core/BlockPos;)V", shift = At.Shift.AFTER))
+    private static void replaceBlockEntity(Level level, BlockPos pos, BlockState state, PistonMovingBlockEntity blockEntity, CallbackInfo ci) {
         BlockEntity movedEntity = ((PistonMovingBlockEntityExt) blockEntity).getMovedEntity();
         if (movedEntity != null) {
-            System.out.println("Replacing block entity with " + movedEntity);
             ((BlockEntityExt) movedEntity).setBlockPos(pos);
 
             level.setBlockEntity(movedEntity);

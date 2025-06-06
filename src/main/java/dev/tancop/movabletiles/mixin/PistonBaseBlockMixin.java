@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.properties.PistonType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -31,19 +30,20 @@ import java.util.Map;
 
 import static net.minecraft.world.level.block.Block.dropResources;
 
+// This is where the magic happens.
 @Mixin(PistonBaseBlock.class)
 public class PistonBaseBlockMixin {
     @Final
     @Shadow
     private boolean isSticky;
 
-    @Unique
-    ArrayList<BlockEntity> mixin$movedEntities = new ArrayList<>();
-
+    // This method is copied from vanilla because we're making 3 changes at different
+    // points in the code. I really hope this counts as fair use.
     @Inject(method = "moveBlocks", at = @At("HEAD"), cancellable = true)
     private void onMoveBlocksStart(Level level, BlockPos pos, Direction facing, boolean extending, CallbackInfoReturnable<Boolean> cir) {
-        System.out.println("Piston moveBlocks started!");
-        mixin$movedEntities.clear();
+        // CHANGE: create a list to store moved block entities
+        ArrayList<BlockEntity> movedEntities = new ArrayList<>();
+        // END CHANGE
 
         BlockPos blockpos = pos.relative(facing);
         if (!extending && level.getBlockState(blockpos).is(Blocks.PISTON_HEAD)) {
@@ -64,16 +64,16 @@ public class PistonBaseBlockMixin {
                 map.put(blockpos1, blockstate);
             }
 
+            // CHANGE: store moved block entities into the list
             for (int i = 0; i < list.size(); i++) {
                 BlockPos blockEntityPos = list.get(i);
-                System.out.println("Processing block pos " + blockEntityPos);
                 BlockEntity blockEntity = (list1.get(i).hasBlockEntity()) ? level.getBlockEntity(blockEntityPos) : null;
-                mixin$movedEntities.add(blockEntity);
+                movedEntities.add(blockEntity);
                 if (blockEntity != null) {
-                    System.out.println("Storing block entity " + blockEntity.getBlockState().getBlock().getName().getString());
                     level.removeBlockEntity(blockEntityPos);
                 }
             }
+            // END CHANGE
 
             List<BlockPos> list2 = pistonstructureresolver.getToDestroy();
             BlockState[] ablockstate = new BlockState[list.size() + list2.size()];
@@ -100,9 +100,11 @@ public class PistonBaseBlockMixin {
                 map.remove(blockpos3);
                 BlockState blockstate8 = Blocks.MOVING_PISTON.defaultBlockState().setValue(MovingPistonBlock.FACING, facing);
                 level.setBlock(blockpos3, blockstate8, 68);
+                // CHANGE: store moved entity into the MovingBlockEntity
                 BlockEntity entity = MovingPistonBlock.newMovingBlockEntity(blockpos3, blockstate8, list1.get(k), facing, extending, false);
-                ((PistonMovingBlockEntityExt) entity).setMovedEntity(mixin$movedEntities.get(k));
+                ((PistonMovingBlockEntityExt) entity).setMovedEntity(movedEntities.get(k));
                 level.setBlockEntity(entity);
+                // END CHANGE
                 ablockstate[i++] = blockstate5;
             }
 
@@ -152,13 +154,10 @@ public class PistonBaseBlockMixin {
         }
     }
 
-
-    // Inverted because the result of `hasBlockEntity` is negated in the original method
+    // Replaces the final `state.hasBlockEntity()` check in `isPushable`.
+    // Inverted because the result is negated in the original method
     @Redirect(method = "isPushable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world" + "/level/block/state/BlockState;hasBlockEntity()Z"))
     private static boolean isBlockEntityUnPushable(BlockState blockState) {
-        if (blockState.hasBlockEntity()) {
-            return !blockState.is(MovableTiles.MOVABLE_BLOCK_ENTITIES);
-        }
-        return false;
+        return blockState.is(MovableTiles.PISTONS_CANNOT_MOVE);
     }
 }
