@@ -16,7 +16,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         super(output, lookupProvider, PistonCommand.MOD_ID, existingFileHelper);
     }
 
-    // Banners, signs and campfires are the only immovable block entities on Bedrock
+    // Banners, signs and campfires break instead of blocking on Bedrock
     @Override
     protected void addTags(@NotNull HolderLookup.Provider lookupProvider) {
         tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED);

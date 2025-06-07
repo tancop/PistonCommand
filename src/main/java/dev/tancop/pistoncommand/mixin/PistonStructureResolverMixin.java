@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+// Overrides the push reaction to destroy blocks tagged with `#pistoncommand:piston_behavior_destroy`
 @Mixin(PistonStructureResolver.class)
 public class PistonStructureResolverMixin {
     @Redirect(method = "addBlockLine", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;" +
@@ -19,8 +20,8 @@ public class PistonStructureResolverMixin {
         return instance.getPistonPushReaction();
     }
 
-    @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;" + "getPistonPushReaction" +
-            "()Lnet/minecraft/world/level/material/PushReaction;"))
+    @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;" + "getPistonPushReaction"
+            + "()Lnet/minecraft/world/level/material/PushReaction;"))
     private PushReaction destroyInResolve(BlockState instance) {
         if (instance.is(PistonCommand.PISTON_BEHAVIOR_DESTROY)) {
             return PushReaction.DESTROY;

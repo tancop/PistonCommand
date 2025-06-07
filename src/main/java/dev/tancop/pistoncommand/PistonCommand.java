@@ -38,7 +38,7 @@ public class PistonCommand {
         modEventBus.addListener(this::gatherData);
     }
 
-    // Registers the new tag for datagen
+    // Registers the new tags for datagen
     private void gatherData(final GatherDataEvent event) {
         PackOutput output = event.getGenerator().getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
