@@ -7,7 +7,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -34,7 +33,7 @@ public class PistonCommand {
     public static final TagKey<Block> PISTON_BEHAVIOR_PUSH_ONLY = BlockTags.create(
             ResourceLocation.fromNamespaceAndPath(MOD_ID, "piston_behavior_push_only"));
 
-    public PistonCommand(IEventBus modEventBus, ModContainer modContainer) {
+    public PistonCommand(IEventBus modEventBus) {
         modEventBus.addListener(this::gatherData);
     }
 
