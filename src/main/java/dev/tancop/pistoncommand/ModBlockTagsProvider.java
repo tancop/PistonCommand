@@ -1,4 +1,4 @@
-package dev.tancop.movabletiles;
+package dev.tancop.pistoncommand;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -10,16 +10,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-// Datagen provider for `#movabletiles:movable_block_entities`.
+// Datagen provider that makes block entity behavior match Bedrock.
 public class ModBlockTagsProvider extends BlockTagsProvider {
     public ModBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, MovableTiles.MOD_ID, existingFileHelper);
+        super(output, lookupProvider, PistonCommand.MOD_ID, existingFileHelper);
     }
 
     // Banners, signs and campfires are the only immovable block entities on Bedrock
     @Override
     protected void addTags(@NotNull HolderLookup.Provider lookupProvider) {
-        tag(MovableTiles.PISTONS_CANNOT_MOVE).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS)
-                .addTag(BlockTags.ALL_SIGNS);
+        tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED);
+
+        tag(PistonCommand.PISTON_BEHAVIOR_DESTROY).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS).addTag(BlockTags.ALL_SIGNS);
     }
 }

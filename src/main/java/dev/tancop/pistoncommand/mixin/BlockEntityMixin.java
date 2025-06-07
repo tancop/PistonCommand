@@ -1,6 +1,6 @@
-package dev.tancop.movabletiles.mixin;
+package dev.tancop.pistoncommand.mixin;
 
-import dev.tancop.movabletiles.BlockEntityExt;
+import dev.tancop.pistoncommand.BlockEntityExt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.*;

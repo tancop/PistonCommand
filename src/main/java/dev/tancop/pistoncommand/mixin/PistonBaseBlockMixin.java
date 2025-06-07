@@ -1,14 +1,15 @@
-package dev.tancop.movabletiles.mixin;
+package dev.tancop.pistoncommand.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import dev.tancop.movabletiles.MovableTiles;
-import dev.tancop.movabletiles.PistonMovingBlockEntityExt;
+import dev.tancop.pistoncommand.PistonCommand;
+import dev.tancop.pistoncommand.PistonMovingBlockEntityExt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.piston.MovingPistonBlock;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
@@ -21,21 +22,24 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static net.minecraft.world.level.block.Block.dropResources;
+import static net.minecraft.world.level.block.piston.PistonBaseBlock.EXTENDED;
 
 // This is where the magic happens.
 @Mixin(PistonBaseBlock.class)
-public class PistonBaseBlockMixin {
+public abstract class PistonBaseBlockMixin extends DirectionalBlock {
     @Final
     @Shadow
     private boolean isSticky;
+
+    protected PistonBaseBlockMixin(Properties p_52591_) {
+        super(p_52591_);
+    }
 
     // This method is copied from vanilla because we're making 3 changes at different
     // points in the code. I really hope this counts as fair use.
@@ -154,10 +158,60 @@ public class PistonBaseBlockMixin {
         }
     }
 
-    // Replaces the final `state.hasBlockEntity()` check in `isPushable`.
-    // Inverted because the result is negated in the original method
-    @Redirect(method = "isPushable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world" + "/level/block/state/BlockState;hasBlockEntity()Z"))
-    private static boolean isBlockEntityUnPushable(BlockState blockState) {
-        return blockState.is(MovableTiles.PISTONS_CANNOT_MOVE);
+    // Replaces `isPushable` to respect new tags.
+    @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
+    private static void isBlockEntityUnPushable(BlockState state, Level level, BlockPos pos, Direction movementDirection, boolean allowDestroy,
+                                                Direction pistonFacing, CallbackInfoReturnable<Boolean> cir) {
+        if (pos.getY() < level.getMinBuildHeight() || pos.getY() > level.getMaxBuildHeight() - 1 || !level.getWorldBorder().isWithinBounds(pos)) {
+            cir.setReturnValue(false);
+        } else if (state.isAir()) {
+            cir.setReturnValue(true);
+        } else if (state.is(Blocks.OBSIDIAN) || state.is(Blocks.CRYING_OBSIDIAN) || state.is(Blocks.RESPAWN_ANCHOR) || state.is(
+                Blocks.REINFORCED_DEEPSLATE)) {
+            cir.setReturnValue(false);
+        } else if (movementDirection == Direction.DOWN && pos.getY() == level.getMinBuildHeight()) {
+            cir.setReturnValue(false);
+        } else if (movementDirection == Direction.UP && pos.getY() == level.getMaxBuildHeight() - 1) {
+            cir.setReturnValue(false);
+        } else {
+            if (!state.is(Blocks.PISTON) && !state.is(Blocks.STICKY_PISTON)) {
+                if (state.getDestroySpeed(level, pos) == -1.0F) {
+                    cir.setReturnValue(false);
+                    return;
+                }
+
+                // Tags override vanilla/mod default behavior
+                if (state.is(PistonCommand.PISTON_BEHAVIOR_NORMAL)) {
+                    cir.setReturnValue(true);
+                    return;
+                } else if (state.is(PistonCommand.PISTON_BEHAVIOR_BLOCK)) {
+                    cir.setReturnValue(false);
+                    return;
+                } else if (state.is(PistonCommand.PISTON_BEHAVIOR_DESTROY)) {
+                    cir.setReturnValue(allowDestroy);
+                    return;
+                } else if (state.is(PistonCommand.PISTON_BEHAVIOR_PUSH_ONLY)) {
+                    cir.setReturnValue(movementDirection == pistonFacing);
+                    return;
+                }
+
+                switch (state.getPistonPushReaction()) {
+                    case BLOCK:
+                        cir.setReturnValue(false);
+                        return;
+                    case DESTROY:
+                        cir.setReturnValue(allowDestroy);
+                        return;
+                    case PUSH_ONLY:
+                        cir.setReturnValue(movementDirection == pistonFacing);
+                        return;
+                }
+            } else if (state.getValue(EXTENDED)) {
+                cir.setReturnValue(false);
+                return;
+            }
+
+            cir.setReturnValue(true);
+        }
     }
 }

@@ -1,13 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8.5",
-  "package": "dev.tancop.movabletiles.mixin",
+  "package": "dev.tancop.pistoncommand.mixin",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "movabletiles.refmap.json",
+  "refmap": "pistoncommand.refmap.json",
   "mixins": [
     "BlockEntityMixin",
     "PistonBaseBlockMixin",
-    "PistonMovingBlockEntityMixin"
+    "PistonMovingBlockEntityMixin",
+    "PistonStructureResolverMixin"
   ],
   "injectors": {
     "defaultRequire": 1

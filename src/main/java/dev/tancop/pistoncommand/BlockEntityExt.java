@@ -1,4 +1,4 @@
-package dev.tancop.movabletiles;
+package dev.tancop.pistoncommand;
 
 import net.minecraft.core.BlockPos;
 
