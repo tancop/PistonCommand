@@ -14,7 +14,7 @@ with data packs:
 **Campfires, banners and signs break** instead of moving to match Bedrock. You can override this with a data pack and
 make them movable like this:
 
-`data/pistoncommand/tags/block/piston_behavior_block.json`
+`data/pistoncommand/tags/block/piston_behavior_destroy.json`
 
 ```json
 {
