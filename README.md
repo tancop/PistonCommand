@@ -1,6 +1,9 @@
 # Piston Command
 
-(Based on [Piston Control](https://www.curseforge.com/minecraft/mc-mods/piston-control) for 1.16)
+![Chest placed on top of an extended piston](./src/main/resources/pistoncommand.png)
+
+(Based on [Piston Control](https://www.curseforge.com/minecraft/mc-mods/piston-control)
+by [the_will_bl](https://www.curseforge.com/members/the_will_bl/projects))
 
 This mod lets you **move block entities** like chests or furnaces with a piston, just like on Bedrock. Works with
 **vanilla or Fabric clients** when installed on the server. Also adds some **new tags** to control the way blocks move
