@@ -1,25 +1,27 @@
+# Piston Command
 
-Installation information
-=======
+(Based on [Piston Control](https://www.curseforge.com/minecraft/mc-mods/piston-control) for 1.16)
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+This mod lets you **move block entities** like chests or furnaces with a piston, just like on Bedrock. Works with
+**vanilla or Fabric clients** when installed on the server. Also adds some **new tags** to control the way blocks move
+with data packs:
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+- `pistoncommand:piston_behavior_normal` - pistons can push and pull the block like normal
+- `pistoncommand:piston_behavior_block` - blocks pistons like obsidian or bedrock
+- `pistoncommand:piston_behavior_destroy` - gets destroyed like beds and torches
+- `pistoncommand:piston_behavior_push_only` - can be pushed but not pulled with a sticky piston, like glazed terracotta
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+**Campfires, banners and signs break** instead of moving to match Bedrock. You can override this with a data pack and
+make them movable like this:
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+`data/pistoncommand/tags/block/piston_behavior_block.json`
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+```json
+{
+  "remove": [
+    "#minecraft:campfires",
+    "#minecraft:banners",
+    "#minecraft:all_signs"
+  ]
+}
+```
