@@ -2,6 +2,7 @@ package dev.tancop.pistoncommand;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -16,11 +17,19 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         super(output, lookupProvider, PistonCommand.MOD_ID, existingFileHelper);
     }
 
-    // Banners, signs and campfires break instead of blocking on Bedrock
+    // Helper to make addTags less verbose
+    private ResourceLocation res(String namespace, String path) {
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+    }
+
+    // Banners, signs and campfires break instead of blocking on Bedrock.
+    // Also tags some modded blocks that don't work after move
     @Override
     protected void addTags(@NotNull HolderLookup.Provider lookupProvider) {
-        tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED);
+        tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED).addOptional(res("create", "fluid_tank"))
+                .addOptional(res("create", "creative_fluid_tank"));
 
-        tag(PistonCommand.PISTON_BEHAVIOR_DESTROY).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS).addTag(BlockTags.ALL_SIGNS);
+        tag(PistonCommand.PISTON_BEHAVIOR_DESTROY).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS).addTag(BlockTags.ALL_SIGNS)
+                .addOptionalTag(res("create", "brittle")).addOptional(res("create", "belt"));
     }
 }

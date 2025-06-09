@@ -1,5 +1,13 @@
 {
   "values": [
-    "#c:relocation_not_supported"
+    "#c:relocation_not_supported",
+    {
+      "id": "create:fluid_tank",
+      "required": false
+    },
+    {
+      "id": "create:creative_fluid_tank",
+      "required": false
+    }
   ]
 }

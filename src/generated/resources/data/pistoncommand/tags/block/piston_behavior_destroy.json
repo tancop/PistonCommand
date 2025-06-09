@@ -2,6 +2,14 @@
   "values": [
     "#minecraft:campfires",
     "#minecraft:banners",
-    "#minecraft:all_signs"
+    "#minecraft:all_signs",
+    {
+      "id": "#create:brittle",
+      "required": false
+    },
+    {
+      "id": "create:belt",
+      "required": false
+    }
   ]
 }
