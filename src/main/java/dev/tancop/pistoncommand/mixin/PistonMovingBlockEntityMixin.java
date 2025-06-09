@@ -4,6 +4,7 @@ import dev.tancop.pistoncommand.BlockEntityExt;
 import dev.tancop.pistoncommand.PistonMovingBlockEntityExt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.piston.PistonMovingBlockEntity;
@@ -48,6 +49,10 @@ public class PistonMovingBlockEntityMixin extends BlockEntity {
             ((BlockEntityExt) movedEntity).setBlockPos(pos);
 
             level.setBlockEntity(movedEntity);
+            movedEntity.setChanged();
+
+            level.markAndNotifyBlock(pos, level.getChunkAt(pos), level.getBlockState(pos), level.getBlockState(pos),
+                    Block.UPDATE_MOVE_BY_PISTON | Block.UPDATE_ALL, 512);
         }
     }
 }
