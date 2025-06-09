@@ -29,10 +29,11 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Export JAR
-        run: ./gradlew jar
+      - name: Get JAR path
+        run: |
+          echo "jar_name=$(find build/libs -name "*.jar" -print -quit)" >> "$GITHUB_ENV"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: build/libs/*.jar
+          path: ${{ env.jar_name }}
