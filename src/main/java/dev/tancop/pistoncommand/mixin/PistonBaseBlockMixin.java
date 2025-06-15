@@ -2,6 +2,7 @@ package dev.tancop.pistoncommand.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import dev.tancop.pistoncommand.Config;
 import dev.tancop.pistoncommand.PistonCommand;
 import dev.tancop.pistoncommand.PistonMovingBlockEntityExt;
 import net.minecraft.core.BlockPos;
@@ -211,7 +212,11 @@ public abstract class PistonBaseBlockMixin extends DirectionalBlock {
                 return;
             }
 
-            cir.setReturnValue(true);
+            if (Config.PUSH_BLOCK_ENTITIES.get()) {
+                cir.setReturnValue(true);
+            } else {
+                cir.setReturnValue(!state.hasBlockEntity());
+            }
         }
     }
 }

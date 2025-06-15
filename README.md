@@ -5,18 +5,17 @@
 Inspired by [Piston Control](https://www.curseforge.com/minecraft/mc-mods/piston-control)
 from [the\_will\_bl](https://www.curseforge.com/members/the_will_bl/projects)
 
-This mod lets you **move block entities** with a piston - chests, furnaces and everything else
-that's [movable on Bedrock](https://minecraft.wiki/w/Piston#Limitations). Works with
-**vanilla and Fabric clients** when installed on the server. Also adds some **new tags** to control the way blocks move
-with data packs:
+This mod gives you control over the way pistons move blocks with four new data pack tags:
 
 * `pistoncommand:piston_behavior_normal` - pistons can push and pull the block like normal
 * `pistoncommand:piston_behavior_block` - blocks pistons like obsidian or bedrock
 * `pistoncommand:piston_behavior_destroy` - gets destroyed like beds and torches
 * `pistoncommand:piston_behavior_push_only` - can be pushed but not pulled with a sticky piston, like glazed terracotta
 
-**Campfires, banners and signs break** instead of moving to match Bedrock. Everything tagged with
-`#c:relocation_not_supported` blocks pistons by default.
+Also lets you **move block entities** like chests and furnaces. You can turn this off in the mod config
+(`Mods > Piston Command > Config`) or by setting `push_block_entities` to `false` in your server's
+`config/pistoncommand-server.toml`. The default data pack makes campfires, banners and signs break to match Bedrock.
 
-Piston Command is **compatible with Create** and as many other mods as possible. If you notice any problems like blocks
-not updating or visual bugs please [report them on GitHub](https://github.com/tancop/PistonCommand/issues).
+Works with **vanilla and Fabric clients** when installed on the server. We're trying to be compatible with as many other
+mods as possible. If you notice any problems like blocks not updating or visual bugs
+please [report them on GitHub](https://github.com/tancop/PistonCommand/issues).
