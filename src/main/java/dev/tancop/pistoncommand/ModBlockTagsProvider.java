@@ -22,14 +22,17 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
-    // Banners, signs and campfires break instead of blocking on Bedrock.
-    // Also tags some modded blocks that don't work after move
+    // Sets up default tag contents
     @Override
     protected void addTags(@NotNull HolderLookup.Provider lookupProvider) {
-        tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED).addOptional(res("create", "fluid_tank"))
-                .addOptional(res("create", "creative_fluid_tank"));
+        tag(PistonCommand.PISTON_BEHAVIOR_BLOCK).addTag(Tags.Blocks.RELOCATION_NOT_SUPPORTED)
+                .addOptional(res("create", "fluid_tank")) // Fluid tanks are multiblock structures that leave a hole when moved
+                .addOptional(res("create", "creative_fluid_tank"))
+                .addOptional(res("create", "mechanical_piston")) // Mechanical pistons get disconnected and break
+                .addOptional(res("create", "sticky_mechanical_piston"));
 
-        tag(PistonCommand.PISTON_BEHAVIOR_DESTROY).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS).addTag(BlockTags.ALL_SIGNS)
-                .addOptionalTag(res("create", "brittle")).addOptional(res("create", "belt"));
+        tag(PistonCommand.PISTON_BEHAVIOR_DESTROY).addTag(BlockTags.CAMPFIRES).addTag(BlockTags.BANNERS)
+                .addTag(BlockTags.ALL_SIGNS) // These blocks break when moved on Bedrock
+                .addOptional(res("create", "belt")); // Mechanical belts stay floating with a broken animation
     }
 }
