@@ -16,8 +16,10 @@ Also lets you **move block entities** like chests and furnaces. You can turn thi
 (`Mods > Piston Command > Config`) or by setting `push_block_entities` to `true` in your server's
 `config/pistoncommand-server.toml`.
 
-You can match Bedrock behavior by installing the `Bedrock Pistons` data pack and turning on `Push Block Entities`. This
-makes all block entities pushable other than campfires, signs, banners and broken modded blocks.
+You can match Bedrock behavior by installing
+the [Bedrock Pistons](https://github.com/tancop/PistonCommand/releases/download/v2.0.0/BedrockPistons.zip) data pack and
+turning on `Push Block Entities`. This makes all block entities pushable other than campfires, signs, banners and broken
+modded blocks.
 
 Works with **vanilla and Fabric clients** when installed on the server. We're trying to be compatible with as many other
 mods as possible. If you notice any problems like blocks not updating or visual bugs
