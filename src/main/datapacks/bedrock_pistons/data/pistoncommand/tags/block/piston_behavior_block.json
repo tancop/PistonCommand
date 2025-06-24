@@ -1,6 +1,5 @@
 {
   "values": [
-    "#c:relocation_not_supported",
     {
       "id": "create:fluid_tank",
       "required": false
@@ -15,10 +14,6 @@
     },
     {
       "id": "create:sticky_mechanical_piston",
-      "required": false
-    },
-    {
-      "id": "create:belt",
       "required": false
     }
   ]

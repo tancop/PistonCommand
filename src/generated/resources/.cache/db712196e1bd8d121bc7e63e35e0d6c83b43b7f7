@@ -1,3 +1,2 @@
-// 1.21.1	2025-06-16T09:20:46.365184712	Tags for minecraft:block mod id pistoncommand
-2a04bc021cb0f2ff3c3d84bf82b6a9fbbe5bc20b data/pistoncommand/tags/block/piston_behavior_block.json
-db6642d4df7668365e0bfb1611fc8b700de4be5c data/pistoncommand/tags/block/piston_behavior_destroy.json
+// 1.21.1	2025-06-24T19:51:43.57685591	Tags for minecraft:block mod id pistoncommand
+15dd2930283c810db973cd57e34d6a1fcc175df2 data/pistoncommand/tags/block/piston_behavior_block.json
